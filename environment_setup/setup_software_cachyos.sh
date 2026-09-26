@@ -38,10 +38,12 @@ if [[ -f /opt/tbotspython/pyvenv.cfg ]] &&
 fi
 /usr/bin/python3.12 -m venv /opt/tbotspython
 /opt/tbotspython/bin/python3 -m pip install --upgrade pip
+if [[ -L /opt/tbotspython/bin/clang-format ]]; then
+    rm /opt/tbotspython/bin/clang-format
+fi
 /opt/tbotspython/bin/python3 -m pip install -r ubuntu24_requirements.txt \
-    'PyQt6==6.10.0' 'platformio==6.1.18'
+    'PyQt6==6.10.0' 'platformio==6.1.18' 'clang-format==14.0.6'
 
-ln -sfnT /usr/bin/clang-format /opt/tbotspython/bin/clang-format
 if [[ ! -e /opt/tbotspython/bin/jdk || -L /opt/tbotspython/bin/jdk ]]; then
     ln -sfnT /usr/lib/jvm/java-21-openjdk /opt/tbotspython/bin/jdk
 fi
