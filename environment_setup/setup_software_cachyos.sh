@@ -42,12 +42,26 @@ if [[ -L /opt/tbotspython/bin/clang-format ]]; then
     rm /opt/tbotspython/bin/clang-format
 fi
 /opt/tbotspython/bin/python3 -m pip install -r ubuntu24_requirements.txt \
-    'PyQt6==6.10.0' 'platformio==6.1.18' 'clang-format==14.0.6'
+    'PyQt6==6.10.0' 'platformio==6.1.18' 'clang-format==14.0.6' \
+    'setuptools==80.10.2'
 
 if [[ ! -e /opt/tbotspython/bin/jdk || -L /opt/tbotspython/bin/jdk ]]; then
     ln -sfnT /usr/lib/jvm/java-21-openjdk /opt/tbotspython/bin/jdk
 fi
 mkdir -p /opt/tbotspython/external_runtimes /tmp/tbots_download_cache
+
+print_status_msg "Configuring Bazel for GCC 10"
+install -m 755 "$SCRIPT_DIR/cachyos_bazel.sh" /opt/tbotspython/bin/bazel-cachyos
+install -m 644 "$SCRIPT_DIR/cachyos.bazelrc" /opt/tbotspython/cachyos.bazelrc
+printf '%s\n' "$(cd "$SCRIPT_DIR/.." && pwd -P)" > /opt/tbotspython/cachyos_bazel_root
+install -d "$HOME/.local/bin"
+user_bazel_link="$HOME/.local/bin/bazel"
+if [[ -e "$user_bazel_link" || -L "$user_bazel_link" ]] &&
+    [[ $(readlink "$user_bazel_link" || true) != /opt/tbotspython/bin/bazel-cachyos ]]; then
+    echo "Refusing to replace the existing $user_bazel_link." >&2
+    exit 1
+fi
+ln -sfnT /opt/tbotspython/bin/bazel-cachyos "$user_bazel_link"
 
 print_status_msg "Installing game controller and AutoReferee"
 if [[ ! -x /opt/tbotspython/gamecontroller ]]; then

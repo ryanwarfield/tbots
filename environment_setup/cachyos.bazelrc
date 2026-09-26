@@ -1,0 +1,13 @@
+# Keep GCC's dependency paths under the Ubuntu-style link already known to Bazel.
+build --copt=-B/usr/lib/gcc/x86_64-linux-gnu/10/
+build --host_copt=-B/usr/lib/gcc/x86_64-linux-gnu/10/
+build --cxxopt=-nostdinc++
+build --host_cxxopt=-nostdinc++
+build --copt=-fno-canonical-system-headers
+build --host_copt=-fno-canonical-system-headers
+build --action_env=CPLUS_INCLUDE_PATH=/usr/lib/gcc/x86_64-linux-gnu/10/include/c++:/usr/lib/gcc/x86_64-linux-gnu/10/include/c++/x86_64-pc-linux-gnu:/usr/lib/gcc/x86_64-linux-gnu/10/include/c++/backward
+build --host_action_env=CPLUS_INCLUDE_PATH=/usr/lib/gcc/x86_64-linux-gnu/10/include/c++:/usr/lib/gcc/x86_64-linux-gnu/10/include/c++/x86_64-pc-linux-gnu:/usr/lib/gcc/x86_64-linux-gnu/10/include/c++/backward
+
+# glibc cannot enable fortify without optimization.
+build:cachyos_noopt --copt=-U_FORTIFY_SOURCE
+build:cachyos_noopt --host_copt=-U_FORTIFY_SOURCE

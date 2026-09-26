@@ -1,6 +1,9 @@
 - Added a CachyOS x86_64 setup script using pacman and AUR packages.
 - Kept the Python 3.12 environment and downloaded tools under `/opt/tbotspython` without deleting existing data.
 - Installed PyQt6, PlatformIO, and clang-format 14 into the Python 3.12 environment.
+- Pinned setuptools to keep `pkg_resources` available for `iterfzf`.
 - Used Arch's Java 21 and `uucp` device access.
 - Reused the Linux game controller, AutoReferee, and firmware tool downloads.
 - Added a rerunnable GCC 10 link for master's Ubuntu library path.
+- Added a Bazel launcher that uses that GCC link on CachyOS.
+- Disabled inactive glibc fortify flags in unoptimized Bazel builds.
